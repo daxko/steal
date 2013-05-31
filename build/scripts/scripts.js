@@ -113,7 +113,7 @@ steal('steal/build', 'steal/parse').then(function( steal ) {
 				currentPackage.src.push(text+";\nsteal.loaded('"+stl.rootSrc+"');");
 			}
 		});
-		
+
 		var compressed = compressCollection(currentCollection, currentLineMap);
 		currentCollection = [];
 		currentPackage.src.push(compressed);
@@ -339,6 +339,9 @@ steal('steal/build', 'steal/parse').then(function( steal ) {
 							}
 							
 							steal.print('ERROR in ' + item.src + ' at line ' + realLine + ': ' + error + '\n');
+							steal.build_errors = steal.build_errors || [];
+							steal.build_errors.push({source:item.src, line: realLine, error: error});
+
 							var text = readFile(item.src), split = text.split(/\n/), start = realLine - 2, end = realLine + 2;
 							if (start < 0) 
 								start = 0;
