@@ -2063,14 +2063,18 @@ if (support.interactive) {
 				steal.options.startFiles = startFiles;
 				steals.push.apply(steals, startFiles)
 			}
-			// either instrument is in this page (if we're the window opened from steal.browser), or its opener has it
-			if ( options.instrument || (!options.browser && win.top && win.top.opener && 
-					win.top.opener.steal && win.top.opener.steal.options.instrument) ) {
-				// force startFiles to load before instrument
-				steals.push(function(){}, {
-					src: "steal/instrument",
-					waits: true
-				});
+			try {
+				// either instrument is in this page (if we're the window opened from steal.browser), or its opener has it
+				if (options.instrument || (!options.browser && win.top && win.top.opener &&
+					win.top.opener.steal && win.top.opener.steal.options.instrument)) {
+					// force startFiles to load before instrument
+					steals.push(function() {
+					}, {
+						src: "steal/instrument",
+						waits: true
+					});
+				}
+			} catch(e) {
 			}
 			//we only load things with force = true
 			if (options.env == 'production' && options.loadProduction) {
